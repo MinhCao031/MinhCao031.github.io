@@ -6,13 +6,14 @@
   <link rel="stylesheet" type="text/css" href="main.css">
 
 <script type="text/javascript">
+const PAGE_SIZE = 10000;
 function isPrime(_n)
 {
   if (_n === 2 || _n === 3) return true;
-  if (_n < 2 || _n % 2 === 0 || _n % 3 === 0) return false;
+  if ( _n % 2 === 0 || _n % 3 === 0 || _n < 2) return false;
 
-  var _sqrt = 2.0;
-  var _olds = 0.0;
+  var _sqrt = 2;
+  var _olds = 0;
 
   while (_sqrt - _olds > 1 || _sqrt - _olds < -1)
   {
@@ -20,40 +21,58 @@ function isPrime(_n)
     _sqrt = (_sqrt + _n / _sqrt) / 2;
   }
 
-	console.log("B4",_sqrt,_sqrt*_sqrt,n);
-	_sqrt += 1;
-	console.log("B6",_sqrt,_sqrt*_sqrt,n);
+  _sqrt += 1;
+  console.log(_sqrt, _sqrt*_sqrt, _n);
 
   for (var _i = 5; _i <= _sqrt; _i += 6)
   {
-    if (_n % _i === 0) return false;
-    if (_n % (_i + 2) === 0) return false;
+    if (_n % _i === 0 || _n % (_i + 2) === 0) return false;
   }
   return true;
 }
 
 var i = 2;
+var page = 1;
 
-function li()
+function render()
 {
-  var _n = i + 1000;
+  var _n = page * PAGE_SIZE;
+  var _m = _n - PAGE_SIZE + 1;
   var what = "";
+  what += i;
+  what += " -> ";
 
-  if (i === 2) {
-    what += "2; 3; ";
+  if (_m < PAGE_SIZE) {
+    what += "2 3 ";
     i = 5;
+  } else {
+    i = _m;
   }
 
   for (; i < _n; i += 6) {
     if (isPrime(i)) {
-      what += i + "; ";
+      what += i + " ";
     }
     if (isPrime(i + 2)) {
-      what += (i + 2) + "; ";
+      what += (i + 2) + ", ";
     }
   }
 
   document.getElementById("texto").textContent = what;
+}
+
+function nextPage()
+{
+  page += 1;
+  render();
+}
+  
+function previousPage()
+{
+  if (page > 1) {
+    page -= 1
+  }
+  render();
 }
 </script>
 </head>
@@ -64,18 +83,23 @@ function li()
   <p>In this website we list <b>all</b> prime numbers. Every single one of them.</p>
 </div>
 
-<div id="texto" class="whitebox" style="height:250px; border:0px;">
+  <div class="orangebox">
+  <a href="javascript:nextPage()">Next page.</a>
+</div>
+<div class="orangebox">
+  <a href="javascript:previousPage()">Previous page.</a>
+</div>
+
+  
+<div id="texto" class="whitebox" style="height:1100px; border:0px;">
 If you can read this, that means that your browser has javascript off and this page is not working.
 </div>
 <br />
 
 <script type="text/javascript">
-  li();
+  nextPage();
 </script>
 
-<div class="orangebox">
-  <a href="javascript:li()">Next page.</a>
-</div>
 
 </body>
 </html>
