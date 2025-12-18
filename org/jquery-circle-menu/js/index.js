@@ -32,6 +32,11 @@ $('#1').click(function(e) {
 $('#2').click(function(e) {
     window.location.href="./index_romantic.html";
 });
-
+$('#3').click(function(e) {
+    window.location.href="./index_primes.html";
+});
+$('#4').click(function(e) {
+    window.location.href="./index_blank.html";
+});
 
 setTimeout(function() { toggleOptions('.selector'); }, 100);
