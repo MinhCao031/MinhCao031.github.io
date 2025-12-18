@@ -1,79 +1,81 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head> 
+<head>
   <title>The complete list of primes.</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="author" content="Luis Silvestre">
   <link rel="stylesheet" type="text/css" href="main.css">
-<!--
-It is javascipt. What else were you expecting?
-Author: Luis Silvestre
--->
 
 <script type="text/javascript">
 function isPrime(_n)
 {
- if (_n == 2 || _n == 3) return true;
- if (_n < 2) return false;
- if (_n%2 == 0 || _n%3 == 0) return false;
+  if (_n === 2 || _n === 3) return true;
+  if (_n < 2 || _n % 2 === 0 || _n % 3 === 0) return false;
 
- var _sqrt=2.0;
- var _olds=0.0;
- while (_sqrt - _olds > 1 || _sqrt - _olds < 1)
- {
-  _olds=_sqrt;
-  _sqrt=(_sqrt + _n/_sqrt)/2;
- }
- console.log(_sqrt,_sqrt*_sqrt,n);
- _sqrt += 1;
- console.log(_sqrt,_sqrt*_sqrt,n);
+  var _sqrt = 2.0;
+  var _olds = 0.0;
 
- for(var _i=5;_i<=_sqrt;_i+=6)
- {
-  if((_n%_i)==0) return false;
-  if((_n%(_i+2))==0) return false;
- }
- return true;
+  while (_sqrt - _olds > 1 || _sqrt - _olds < -1)
+  {
+    _olds = _sqrt;
+    _sqrt = (_sqrt + _n / _sqrt) / 2;
+  }
+
+	console.log("B4",_sqrt,_sqrt*_sqrt,n);
+	_sqrt += 1;
+	console.log("B6",_sqrt,_sqrt*_sqrt,n);
+
+  for (var _i = 5; _i <= _sqrt; _i += 6)
+  {
+    if (_n % _i === 0) return false;
+    if (_n % (_i + 2) === 0) return false;
+  }
+  return true;
 }
 
-function li(_o)
+var i = 2;
+
+function li()
 {
-  var _n=i + 1000;
-  var what="";
-  if (i == 2) {
+  var _n = i + 1000;
+  var what = "";
+
+  if (i === 2) {
     what += "2; 3; ";
     i = 5;
   }
-  for(;i<_n;i+=6){
-    if(isPrime(i)){
-	 what += i.toString()+"; ";
-	}
-    if(isPrime(i+2)){
-	 what += i.toString()+"; ";
-	}
+
+  for (; i < _n; i += 6) {
+    if (isPrime(i)) {
+      what += i + "; ";
+    }
+    if (isPrime(i + 2)) {
+      what += (i + 2) + "; ";
+    }
   }
-  document.getElementById("texto").firstChild.nodeValue = what;
-  //appendChild(mytext);
+
+  document.getElementById("texto").textContent = what;
 }
 </script>
 </head>
 
 <body>
 
-<div class="orangebox"> 
-<p> In this website we list <b> all </b> prime numbers. Every single one of them.</p>
+<div class="orangebox">
+  <p>In this website we list <b>all</b> prime numbers. Every single one of them.</p>
 </div>
 
 <div id="texto" class="whitebox" style="height:250px; border:0px;">
 If you can read this, that means that your browser has javascript off and this page is not working.
-</div> <br />
+</div>
+<br />
 
 <script type="text/javascript">
-  i =2;
   li();
 </script>
 
-<div class="orangebox"> <a href="javascript:li()"> Next page. </a> </div>
+<div class="orangebox">
+  <a href="javascript:li()">Next page.</a>
+</div>
 
 </body>
 </html>
