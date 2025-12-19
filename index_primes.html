@@ -7,73 +7,80 @@
 
 <script type="text/javascript">
 const PAGE_SIZE = 10000;
-function isPrime(_n)
+var page = 1;
+
+function isPrime(n)
 {
-  if (_n === 2 || _n === 3) return true;
-  if ( _n % 2 === 0 || _n % 3 === 0 || _n < 2) return false;
+  if (n === 2 || n === 3) return true;
+  if (n < 2 || n % 2 === 0 || n % 3 === 0) return false;
 
-  var _sqrt = 2;
-  var _olds = 0;
+  var sqrt = 2;
+  var old = 0;
 
-  while (_sqrt - _olds > 1 || _sqrt - _olds < -1)
+  while (Math.abs(sqrt - old) > 1)
   {
-    _olds = _sqrt;
-    _sqrt = (_sqrt + _n / _sqrt) / 2;
+    old = sqrt;
+    sqrt = (sqrt + n / sqrt) / 2;
   }
 
-  _sqrt += 1;
-  console.log(_sqrt, _sqrt*_sqrt, _n);
+  sqrt += 1;
 
-  for (var _i = 5; _i <= _sqrt; _i += 6)
+  for (var i = 5; i <= sqrt; i += 6)
   {
-    if (_n % _i === 0 || _n % (_i + 2) === 0) return false;
+    if (n % i === 0 || n % (i + 2) === 0) return false;
   }
   return true;
 }
 
-var i = 2;
-var page = 1;
-
 function render()
 {
-  var _n = page * PAGE_SIZE;
-  var _m = _n - PAGE_SIZE + 1;
-  var what = "";
-  what += i;
-  what += " -> ";
+  var start = (page - 1) * PAGE_SIZE;
+  start    += 5 - start % 6;
+  var end   = page * PAGE_SIZE;
+  end      += 5 - end % 6;
+  var out = "";
 
-  if (_m < PAGE_SIZE) {
-    what += "2 3 ";
-    i = 5;
-  } else {
-    i = _m;
+  if (start < 6) {
+    out += "2 3 ";
+    start = 5;
   }
 
-  for (; i < _n; i += 6) {
-    if (isPrime(i)) {
-      what += i + " ";
-    }
-    if (isPrime(i + 2)) {
-      what += (i + 2) + ", ";
-    }
+  for (var n = start; n < end; n += 6) {
+    if (isPrime(n)) out += n + " ";
+    if (isPrime(n + 2)) out += (n + 2) + " ";
   }
 
-  document.getElementById("texto").textContent = what;
+  document.getElementById("texto").textContent = out;
+  document.getElementById("range").textContent =
+    "Range: " + start + " → " + end;
 }
 
 function nextPage()
 {
-  page += 1;
+  page++;
+  render();
+}
+
+function previousPage()
+{
+  if (page > 1) page--;
   render();
 }
   
-function previousPage()
+function goToPage()
 {
-  if (page > 1) {
-    page -= 1
+  var val = document.getElementById("pageInput").value;
+  var p = parseInt(val, 10);
+
+  if (isNaN(p) || p < 1) {
+    alert("Please enter a positive integer (>= 1)");
+    return;
   }
+
+  page = p;
   render();
 }
+
 </script>
 </head>
 
@@ -82,24 +89,24 @@ function previousPage()
 <div class="orangebox">
   <p>In this website we list <b>all</b> prime numbers. Every single one of them.</p>
 </div>
-
-  <div class="orangebox">
-  <a href="javascript:nextPage()">Next page.</a>
-</div>
-<div class="orangebox">
-  <a href="javascript:previousPage()">Previous page.</a>
-</div>
-
   
-<div id="texto" class="whitebox" style="height:1100px; border:0px;">
-If you can read this, that means that your browser has javascript off and this page is not working.
+<div class="orangebox">
+  <a href="javascript:previousPage()">Previous page</a> |
+  <a href="javascript:nextPage()">Next page</a>
+  &nbsp;&nbsp;
+  Go to page:
+  <input id="pageInput" type="number" min="1" step="1" style="width:80px">
+  <button onclick="goToPage()">Go</button>
 </div>
-<br />
+<div id="range" class="whitebox">Range</div>
+
+<div id="texto" class="whitebox" style="height:1100px; border:0px;">
+JavaScript required.
+</div>
 
 <script type="text/javascript">
-  nextPage();
+  render();
 </script>
-
 
 </body>
 </html>
