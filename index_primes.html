@@ -39,20 +39,35 @@ function render()
   var end   = page * PAGE_SIZE;
   end      += 5 - end % 6;
   var out = "";
-
+  var quad1379 = "The quad primes 1-3-7-9:";
+  
   if (start < 6) {
     out += "2 3 ";
     start = 5;
   }
 
   for (var n = start; n < end; n += 6) {
-    if (isPrime(n)) out += n + " ";
-    if (isPrime(n + 2)) out += (n + 2) + " ";
+    var pair = 0;
+    if (isPrime(n + 0)) { pair += 1; out += (n + 0) + " "; }
+    if (isPrime(n + 2)) { pair += 1; out += (n + 2) + " ";}
+    if (pair == 2 && n % 10 == 1) {
+      if (isPrime(n + 6)) { pair += 1; out += (n + 6) + " "; }
+      if (isPrime(n + 8)) { pair += 1; out += (n + 8) + " "; }
+      if (pair == 4) {
+        quad1379 += " (" + (n + 0) + ", " + (n + 2);
+        quad1379 += ", " + (n + 6) + ", " + (n + 8) + ")";
+      }
+      n += 6;
+    }
   }
 
   document.getElementById("texto").textContent = out;
   document.getElementById("range").textContent =
     "Range: " + start + " → " + end;
+  if (quad1379 != "The quad primes 1-3-7-9:")
+    document.getElementById("thequad1379").textContent = quad1379;
+  else
+    document.getElementById("thequad1379").textContent = "The quad primes 1-3-7-9: None";    
 }
 
 function nextPage()
@@ -71,6 +86,10 @@ function goToPage()
 {
   var val = document.getElementById("pageInput").value;
   var p = parseInt(val, 10);
+  
+  if (p == page) {
+    return;
+  }
 
   if (isNaN(p) || p < 1) {
     alert("Please enter a positive integer (>= 1)");
@@ -88,16 +107,21 @@ function goToPage()
 
 <div class="orangebox">
   <p>In this website we list <b>all</b> prime numbers. Every single one of them.</p>
-</div>
+</div>  
   
 <div class="orangebox">
   <a href="javascript:previousPage()">Previous page</a> |
   <a href="javascript:nextPage()">Next page</a>
   &nbsp;&nbsp;
   Go to page:
-  <input id="pageInput" type="number" min="1" step="1" style="width:80px">
+  <input id="pageInput" type="number" min="1" step="1" style="width:120px">
   <button onclick="goToPage()">Go</button>
 </div>
+  
+<div id="thequad1379" class="whitebox" style="height:80px; border:0px;">
+The quad primes 1-3-7-9: None
+</div>    
+  
 <div id="range" class="whitebox">Range</div>
 
 <div id="texto" class="whitebox" style="height:1100px; border:0px;">
